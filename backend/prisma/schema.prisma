@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Rol {
+  ADMINISTRADOR
+  BIBLIOTECARIO
+}
+
+enum EstadoPrestamo {
+  ACTIVO
+  DEVUELTO
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  correo    String   @unique
+  password  String
+  rol       Rol      @default(BIBLIOTECARIO)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("usuarios")
+}
+
+model Libro {
+  id                  Int        @id @default(autoincrement())
+  codigo              String     @unique
+  titulo              String
+  autor               String
+  categoria           String
+  isbn                String     @unique
+  cantidadTotal       Int
+  cantidadDisponible  Int
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  prestamos           Prestamo[]
+
+  @@map("libros")
+}
+
+model Lector {
+  id        Int        @id @default(autoincrement())
+  dni       String     @unique
+  nombre    String
+  apellidos String
+  correo    String     @unique
+  telefono  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  prestamos Prestamo[]
+
+  @@map("lectores")
+}
+
+model Prestamo {
+  id               Int            @id @default(autoincrement())
+  libroId          Int
+  lectorId         Int
+  fechaPrestamo    DateTime       @default(now())
+  fechaDevolucion  DateTime?
+  estado           EstadoPrestamo @default(ACTIVO)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  libro  Libro  @relation(fields: [libroId], references: [id])
+  lector Lector @relation(fields: [lectorId], references: [id])
+
+  @@map("prestamos")
+}
