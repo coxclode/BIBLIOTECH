@@ -86,9 +86,13 @@ export function ReadersPage() {
       <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <input
           required
-          placeholder="DNI"
+          placeholder="DNI (8 dígitos)"
+          inputMode="numeric"
+          pattern="\d{8}"
+          title="El DNI debe tener exactamente 8 dígitos numéricos"
+          maxLength={8}
           value={form.dni}
-          onChange={(e) => setForm({ ...form, dni: e.target.value })}
+          onChange={(e) => setForm({ ...form, dni: e.target.value.replace(/\D/g, "").slice(0, 8) })}
           className="rounded-md border border-slate-300 px-3 py-2 text-sm"
         />
         <input
@@ -115,9 +119,13 @@ export function ReadersPage() {
         />
         <input
           required
-          placeholder="Teléfono"
+          placeholder="Teléfono (9 dígitos)"
+          inputMode="numeric"
+          pattern="\d{9}"
+          title="El teléfono debe tener exactamente 9 dígitos numéricos"
+          maxLength={9}
           value={form.telefono}
-          onChange={(e) => setForm({ ...form, telefono: e.target.value })}
+          onChange={(e) => setForm({ ...form, telefono: e.target.value.replace(/\D/g, "").slice(0, 9) })}
           className="rounded-md border border-slate-300 px-3 py-2 text-sm"
         />
 
