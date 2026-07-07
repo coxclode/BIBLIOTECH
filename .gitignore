@@ -27,5 +27,8 @@ Thumbs.db
 # Testing
 coverage/
 
+# TypeScript build info
+*.tsbuildinfo
+
 # Prisma
 backend/prisma/dev.db
