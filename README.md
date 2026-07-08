@@ -234,6 +234,32 @@ El workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) se ejecuta en
 
 Si cualquier paso falla (incluidas las pruebas), el pipeline se detiene y marca el workflow en rojo.
 
+## Release (GitHub Container Registry)
+
+El job `release` de [`ci.yml`](.github/workflows/ci.yml) se ejecuta **solo**
+cuando hay un push a `main` y los jobs `backend` y `frontend` terminaron en
+verde. Construye las imágenes de producción y las publica en
+[GitHub Container Registry](https://ghcr.io) (gratuito para repositorios
+públicos), etiquetadas con el SHA del commit y con `latest`:
+
+- `ghcr.io/coxclode/bibliotech-backend:<sha>`
+- `ghcr.io/coxclode/bibliotech-frontend:<sha>`
+
+No requiere configurar ningún secreto adicional: usa el `GITHUB_TOKEN` que
+GitHub Actions genera automáticamente en cada ejecución (con permiso
+`packages: write` otorgado en el propio job).
+
+La primera vez que se publique un paquete, hay que marcarlo como público desde
+`github.com/coxclode?tab=packages` → paquete → **Package settings** → *Change
+visibility*, si se quiere permitir `docker pull` sin autenticación.
+
+Para traer una imagen publicada:
+
+```bash
+docker pull ghcr.io/coxclode/bibliotech-backend:latest
+docker pull ghcr.io/coxclode/bibliotech-frontend:latest
+```
+
 ## Comandos útiles
 
 | Comando                                | Descripción                                       |
