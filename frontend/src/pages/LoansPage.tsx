@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Libro, Lector, Prestamo } from "../types";
-import { listarLibros } from "../services/books.service";
-import { listarLectores } from "../services/readers.service";
-import * as loansService from "../services/loans.service";
+import { listarLibros } from "../services/book.service";
+import { listarLectores } from "../services/reader.service";
+import * as loansService from "../services/loan.service";
 import { useNotification } from "../context/NotificationContext";
 import { extraerMensajeError } from "../services/api";
 

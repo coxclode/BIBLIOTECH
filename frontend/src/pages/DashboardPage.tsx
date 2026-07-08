@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { listarLibros } from "../services/books.service";
-import { listarLectores } from "../services/readers.service";
-import { listarPrestamos } from "../services/loans.service";
+import { listarLibros } from "../services/book.service";
+import { listarLectores } from "../services/reader.service";
+import { listarPrestamos } from "../services/loan.service";
 import { useNotification } from "../context/NotificationContext";
 import { extraerMensajeError } from "../services/api";
 

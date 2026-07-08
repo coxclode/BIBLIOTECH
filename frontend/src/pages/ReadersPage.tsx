@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Lector } from "../types";
-import * as readersService from "../services/readers.service";
+import * as readersService from "../services/reader.service";
 import { useNotification } from "../context/NotificationContext";
 import { extraerMensajeError } from "../services/api";
 

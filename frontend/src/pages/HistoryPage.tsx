@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Prestamo } from "../types";
-import { listarPrestamos } from "../services/loans.service";
+import { listarPrestamos } from "../services/loan.service";
 import { useNotification } from "../context/NotificationContext";
 import { extraerMensajeError } from "../services/api";
 

@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Libro } from "../types";
-import * as booksService from "../services/books.service";
+import * as booksService from "../services/book.service";
 import { useNotification } from "../context/NotificationContext";
 import { extraerMensajeError } from "../services/api";
 

@@ -46,11 +46,24 @@ Arquitectura de tres capas, cada una en su propio contenedor Docker:
 
 El backend sigue una arquitectura por capas (`routes` → `controllers` → `services` → `Prisma`), con middlewares centralizados para autenticación, autorización por rol y manejo de errores.
 
+### Convenciones de nombres
+
+Cada capa nombra sus archivos como `<entidad>.<capa>.ts`, con la entidad en
+singular, tanto en backend como en frontend:
+
+- Backend: `book.controller.ts`, `book.service.ts`, `book.routes.ts` (y lo
+  mismo para `auth`, `reader`, `loan`).
+- Frontend: `book.service.ts`, `reader.service.ts`, `loan.service.ts`,
+  `auth.service.ts`; páginas como `<Entidad>Page.tsx` (`BooksPage.tsx`,
+  `ReadersPage.tsx`, `LoansPage.tsx`, `HistoryPage.tsx`, `DashboardPage.tsx`,
+  `LoginPage.tsx`).
+
 ### Estructura del repositorio
 
 ```text
 BIBLIOTECH/
 ├── .github/workflows/ci.yml     Pipeline de integración continua
+├── PLANNING.md                  Requisitos, roles y modelo de datos
 ├── backend/                     API REST (Node + Express + TypeScript + Prisma)
 │   ├── src/
 │   │   ├── config/              Configuración de entorno y cliente de Prisma
