@@ -1,8 +1,11 @@
 import express, { Application } from "express";
 import cors from "cors";
 import { env } from "./config/env";
+import { initSentry, Sentry } from "./config/sentry";
 import routes from "./routes";
 import { errorMiddleware, notFoundMiddleware } from "./middlewares/error.middleware";
+
+initSentry();
 
 export function createApp(): Application {
   const app = express();
@@ -17,6 +20,7 @@ export function createApp(): Application {
   app.use("/api", routes);
 
   app.use(notFoundMiddleware);
+  Sentry.setupExpressErrorHandler(app);
   app.use(errorMiddleware);
 
   return app;

@@ -321,6 +321,42 @@ a partir del Blueprint.
 > `Dockerfile` de cada servicio funciona igual en **Railway** o **Fly.io**
 > (ambos con capa gratuita y despliegue conectado al repo de GitHub).
 
+## Monitor (Sentry + UptimeRobot)
+
+### Captura de errores con Sentry
+
+Backend (`@sentry/node`) y frontend (`@sentry/react`) ya están integrados
+(`backend/src/config/sentry.ts`, `frontend/src/config/sentry.ts`) y
+**deshabilitados por defecto**: si no se define el DSN, `initSentry()` no hace
+nada y la aplicación funciona exactamente igual que sin Sentry.
+
+Para activarlo (plan free de [sentry.io](https://sentry.io), sin tarjeta):
+
+1. Crear una cuenta y dos proyectos: uno **Node/Express** (para el backend) y
+   uno **React** (para el frontend). Cada uno da un DSN distinto.
+2. Backend: configurar la variable `SENTRY_DSN` (en `.env`, en el entorno de
+   Docker Compose, o como env var en Render).
+3. Frontend: configurar `VITE_SENTRY_DSN`. Como Vite la incrusta en el build,
+   en Docker hay que pasarla como build arg (ya está cableado en
+   `docker-compose.yml` y en `render.yaml`) y volver a construir la imagen.
+
+Con el DSN configurado, las excepciones no controladas del backend (vía
+`Sentry.setupExpressErrorHandler` en `app.ts`) y los errores de React no
+capturados en el frontend (vía `Sentry.ErrorBoundary` en `main.tsx`) se
+reportan automáticamente al proyecto de Sentry correspondiente.
+
+### Disponibilidad con UptimeRobot
+
+Para monitorear que el backend esté arriba, en
+[uptimerobot.com](https://uptimerobot.com) (plan free, sin tarjeta):
+
+1. **Add New Monitor** → tipo **HTTP(s)**.
+2. URL: la del endpoint `/health` desplegado (ej.
+   `https://bibliotech-backend.onrender.com/health`).
+3. Monitoring Interval: **5 minutes**.
+4. En **Alert Contacts**, agregar el correo donde se quieren recibir los
+   avisos cuando el endpoint deje de responder (y cuando se recupere).
+
 ## Comandos útiles
 
 | Comando                                | Descripción                                       |

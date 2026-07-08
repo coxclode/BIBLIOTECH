@@ -30,6 +30,7 @@ services:
       PORT: ${PORT}
       NODE_ENV: ${NODE_ENV}
       CORS_ORIGIN: ${CORS_ORIGIN}
+      SENTRY_DSN: ${SENTRY_DSN}
     ports:
       - "${PORT}:4000"
     depends_on:
@@ -48,6 +49,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL}
+        VITE_SENTRY_DSN: ${VITE_SENTRY_DSN}
     container_name: biblioteca_frontend
     restart: unless-stopped
     ports:
