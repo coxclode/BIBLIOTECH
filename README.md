@@ -13,6 +13,25 @@ BIBLIOTECH permite a una biblioteca:
 - Registrar devoluciones, restaurando la disponibilidad del libro.
 - Consultar el historial completo de préstamos (libro, lector, fechas y estado).
 
+## Planificación
+
+Los requisitos funcionales, roles de usuario y el modelo de datos están
+documentados en [`PLANNING.md`](PLANNING.md).
+
+El seguimiento del trabajo se hace con **GitHub Projects** (tablero Kanban) e
+**Issues**:
+
+- Tablero: [BIBLIOTECH Roadmap](https://github.com/users/coxclode/projects/1),
+  con columnas `Todo` → `In Progress` → `Done`.
+- Cada funcionalidad principal tiene su Issue en
+  [coxclode/BIBLIOTECH/issues](https://github.com/coxclode/BIBLIOTECH/issues),
+  etiquetado como `feature`, `bug` o `docs` según corresponda.
+- Al mover un Issue a `Done` en el tablero, GitHub lo cierra automáticamente
+  (workflow por defecto del tablero).
+- Los commits y Pull Requests que resuelven un Issue lo referencian en el
+  mensaje (por ejemplo `Closes #4`); GitHub cierra el Issue automáticamente al
+  fusionar el commit/PR a `main`.
+
 ## Arquitectura
 
 Arquitectura de tres capas, cada una en su propio contenedor Docker:
@@ -214,3 +233,5 @@ Para documentar el proyecto, se recomienda incluir capturas de:
 - Gestión de lectores (listado y formulario).
 - Registro de un préstamo.
 - Historial de préstamos.
+
+Proyecto Desarrollado con DevOps 
