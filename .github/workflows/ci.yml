@@ -58,8 +58,30 @@ jobs:
       - name: Aplicar migraciones
         run: npx prisma migrate deploy
 
-      - name: Ejecutar pruebas unitarias
-        run: npm test
+      - name: Ejecutar pruebas unitarias con cobertura
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee test-output.log
+
+      - name: Publicar resumen de cobertura
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Cobertura de pruebas (backend)"
+            echo '```'
+            awk '/Coverage summary/,0' test-output.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Subir reporte de cobertura como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: backend/coverage
+          retention-days: 14
 
       - name: Compilar backend
         run: npm run build

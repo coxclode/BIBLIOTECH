@@ -209,11 +209,18 @@ El backend incluye pruebas unitarias con Jest y Supertest que validan:
 - Registro de préstamos y actualización de disponibilidad.
 - Rechazo de préstamos sin ejemplares disponibles.
 - Registro de devoluciones.
+- Validación de DNI (8 dígitos) y teléfono (9 dígitos) de los lectores.
 
 ```bash
 cd backend
 npm test
 ```
+
+Cada corrida genera un **reporte de cobertura** (statements, branches,
+functions, lines) en `backend/coverage/` (HTML navegable en
+`coverage/lcov-report/index.html`), configurado en `backend/jest.config.js`.
+En GitHub Actions este reporte se publica en el resumen del job y también se
+sube como artefacto descargable (`backend-coverage-report`) en cada ejecución.
 
 ## Integración continua (GitHub Actions)
 
@@ -222,7 +229,7 @@ El workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) se ejecuta en
 1. Checkout del código.
 2. Instalación de dependencias (`npm ci`).
 3. Generación del cliente de Prisma y aplicación de migraciones contra un servicio de PostgreSQL efímero.
-4. Ejecución de las pruebas unitarias del backend.
+4. Ejecución de las pruebas unitarias del backend con reporte de cobertura (se publica en el resumen del job y como artefacto).
 5. Compilación (`build`) de backend y frontend.
 
 Si cualquier paso falla (incluidas las pruebas), el pipeline se detiene y marca el workflow en rojo.
