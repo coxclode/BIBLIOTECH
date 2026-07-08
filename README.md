@@ -159,6 +159,26 @@ docker compose up -d --build
 - Backend:  http://localhost:4000/api
 - Health check del backend: http://localhost:4000/health
 
+### Operación: healthchecks y auto-recuperación
+
+Los tres servicios (`postgres`, `backend`, `frontend`) tienen:
+
+- `restart: unless-stopped` en `docker-compose.yml`, para que Docker los
+  reinicie solos si el proceso dentro del contenedor muere, o si el Docker
+  daemon se reinicia (a menos que se hayan detenido manualmente con
+  `docker compose stop`).
+- Un `HEALTHCHECK` (definido en cada `Dockerfile` y reforzado en
+  `docker-compose.yml`) que golpea `/health` en el backend y `/` en el
+  frontend cada 30s. `backend` no arranca hasta que `postgres` está
+  `healthy`, y `frontend` no arranca hasta que `backend` está `healthy`
+  (`depends_on: condition: service_healthy`).
+
+Ver el estado de salud de todos los servicios:
+
+```bash
+docker compose ps
+```
+
 Para detener y eliminar los contenedores:
 
 ```bash
