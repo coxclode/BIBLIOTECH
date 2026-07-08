@@ -1,5 +1,7 @@
 # BIBLIOTECH
 
+[![CI](https://github.com/coxclode/BIBLIOTECH/actions/workflows/ci.yml/badge.svg)](https://github.com/coxclode/BIBLIOTECH/actions/workflows/ci.yml)
+
 Sistema de Préstamo y Registro de Biblioteca. Aplicación web de tres capas (frontend, backend y base de datos) para gestionar libros, lectores y préstamos, con autenticación por roles, pruebas automatizadas, contenerización con Docker y un pipeline de integración continua con GitHub Actions.
 
 ## Descripción
