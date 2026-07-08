@@ -15,6 +15,23 @@ BIBLIOTECH permite a una biblioteca:
 - Registrar devoluciones, restaurando la disponibilidad del libro.
 - Consultar el historial completo de préstamos (libro, lector, fechas y estado).
 
+## Ciclo DevOps completo
+
+El proyecto cubre explícitamente las 8 etapas del ciclo DevOps, con
+herramientas gratuitas compatibles con GitHub (sin AWS, Terraform, Prometheus
+ni Grafana):
+
+| Etapa | Herramienta | Evidencia en el proyecto |
+|---|---|---|
+| **Plan** | GitHub Projects + Issues | Tablero [BIBLIOTECH Roadmap](https://github.com/users/coxclode/projects/1) (`Todo`/`In Progress`/`Done`); [Issues #1–#6](https://github.com/coxclode/BIBLIOTECH/issues?q=is%3Aissue) por funcionalidad; [`PLANNING.md`](PLANNING.md) con requisitos, roles y modelo de datos |
+| **Code** | Arquitectura por capas + convenciones de nombres | `backend/src/{controllers,services,routes,middlewares}`; sección [Convenciones de nombres](#convenciones-de-nombres) más abajo |
+| **Build** | GitHub Actions | Badge de CI al inicio de este README; jobs `backend` y `frontend` en [`.github/workflows/ci.yml`](.github/workflows/ci.yml), que fallan visiblemente si el build no compila |
+| **Test** | Jest + Supertest, con cobertura | 15 pruebas en [`backend/tests/`](backend/tests); reporte de cobertura (`backend/jest.config.js`) publicado en el resumen del job y como artefacto en cada corrida de CI |
+| **Release** | Docker Buildx + GitHub Container Registry | Job `release` en `ci.yml` (solo en push a `main` y con tests en verde) publica `ghcr.io/coxclode/bibliotech-{backend,frontend}` etiquetadas con el SHA del commit |
+| **Deploy** | Render.com (Blueprint) | [`render.yaml`](render.yaml) define los Web Services (Docker) y la base de datos PostgreSQL gestionada; ver sección [Deploy (Render.com)](#deploy-rendercom) |
+| **Operate** | Docker healthcheck + restart policy | `HEALTHCHECK` en ambos `Dockerfile` y en `docker-compose.yml`, con `restart: unless-stopped` y arranque encadenado por salud (`depends_on: condition: service_healthy`) |
+| **Monitor** | Sentry + UptimeRobot | `backend/src/config/sentry.ts` y `frontend/src/config/sentry.ts` (captura de errores, deshabilitada si no hay DSN); ver sección [Monitor (Sentry + UptimeRobot)](#monitor-sentry--uptimerobot) para configurar alertas de disponibilidad |
+
 ## Planificación
 
 Los requisitos funcionales, roles de usuario y el modelo de datos están
