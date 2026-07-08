@@ -1,0 +1,41 @@
+databases:
+  - name: bibliotech-db
+    plan: free
+    databaseName: biblioteca_db
+    user: biblioteca_user
+
+services:
+  - type: web
+    name: bibliotech-backend
+    runtime: docker
+    plan: free
+    repo: https://github.com/coxclode/BIBLIOTECH
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: JWT_EXPIRES_IN
+        value: 8h
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bibliotech-db
+          property: connectionString
+
+  - type: web
+    name: bibliotech-frontend
+    runtime: docker
+    plan: free
+    repo: https://github.com/coxclode/BIBLIOTECH
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: VITE_API_URL
+        sync: false

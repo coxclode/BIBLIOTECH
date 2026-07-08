@@ -260,6 +260,47 @@ docker pull ghcr.io/coxclode/bibliotech-backend:latest
 docker pull ghcr.io/coxclode/bibliotech-frontend:latest
 ```
 
+## Deploy (Render.com)
+
+El archivo [`render.yaml`](render.yaml) es un **Blueprint** de Render que
+define los tres componentes con planes gratuitos: `bibliotech-backend` y
+`bibliotech-frontend` (Web Services Docker, construidos desde sus propios
+`Dockerfile`) y `bibliotech-db` (PostgreSQL gestionado).
+
+### Conectar el repositorio (una sola vez)
+
+1. Crear una cuenta en [render.com](https://render.com) (no pide tarjeta para
+   el plan free).
+2. **New** → **Blueprint** → conectar la cuenta de GitHub y seleccionar el
+   repositorio `coxclode/BIBLIOTECH`. Render detecta `render.yaml` y propone
+   crear los tres recursos.
+3. Aplicar el Blueprint. Render crea la base de datos, y los dos Web Services
+   con un deploy automático en cada push a `main` (Auto-Deploy activado por
+   defecto).
+
+### Variables de entorno que hay que completar manualmente
+
+`render.yaml` marca con `sync: false` las variables que dependen de URLs que
+Render asigna **después** de crear los servicios (no se pueden conocer de
+antemano):
+
+| Servicio | Variable | Valor a poner |
+|---|---|---|
+| `bibliotech-backend` | `CORS_ORIGIN` | URL pública que Render asignó a `bibliotech-frontend` (ej. `https://bibliotech-frontend.onrender.com`) |
+| `bibliotech-frontend` | `VITE_API_URL` | URL pública de `bibliotech-backend` + `/api` (ej. `https://bibliotech-backend.onrender.com/api`) |
+
+Como `VITE_API_URL` se usa en **tiempo de build** (Vite la incrusta en el
+bundle), después de configurarla hay que disparar un **Manual Deploy** del
+servicio `bibliotech-frontend` para que tome efecto. El resto de variables
+(`JWT_SECRET`, `DATABASE_URL`, etc.) las genera/conecta Render automáticamente
+a partir del Blueprint.
+
+> **Nota sobre el plan free de Render:** las bases de datos PostgreSQL del
+> plan gratuito de Render expiran a los 30 días (hay que recrearlas o migrar a
+> un plan pago). Si se prefiere una alternativa sin ese límite, el mismo
+> `Dockerfile` de cada servicio funciona igual en **Railway** o **Fly.io**
+> (ambos con capa gratuita y despliegue conectado al repo de GitHub).
+
 ## Comandos útiles
 
 | Comando                                | Descripción                                       |
